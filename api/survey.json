@@ -1,0 +1,10 @@
+{
+  "cold_start_message": {"next_question": "q1", "type": "message", "text": "Welcome to the Survey Bot!"},
+  "q1": {"next_question": "q2", "type": "input", "fields": ["name", "age", "email", "course"], "text": "What is your name, age, email, and course?"},
+  "q2": {"next_question_yes": "q3", "next_question_no": "q_comment", "type": "yes_no", "field": "problems_in_course", "text": "Was there any problem in your course?"},
+  "q3": {"next_question_yes": "q4", "next_question_no": "q_comment", "type": "yes_no", "field": "join_another_course", "text": "Are you going to join another course?"},
+  "q4": {"next_question": "q_comment", "type": "choice", "field": "courses_to_join", "choices": ["Option A", "Option B", "Option C"], "text": "What courses would you like to join?"},
+  "q_comment": {"next_question": "rating_question", "type": "comment", "field": "comment", "text": "Please leave a comment."},
+  "rating_question": {"next_question": "thank_you", "type": "rating", "field": "overall_rating", "text": "How would you rate the overall experience with our Customer Support Team? Please note that 5 means very well and 1 stands for very bad."},
+  "thank_you": {"next_question": "", "type": "message", "text": "Thank you for completing the survey!"}
+}

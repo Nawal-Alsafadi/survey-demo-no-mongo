@@ -1,0 +1,102 @@
+<!-- templates/survey.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Bot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    {% if question_id == 'cold_start_message' %}
+        <h1>{{ message }}</h1>
+        <form id="surveyForm" action="/survey" method="POST">
+            <label>Name: <input type="text" name="name"></label>
+            <label>Age: <input type="text" name="age"></label>
+            <label>Email: <input type="text" name="email"></label>
+            <label>Course: <input type="text" name="course"></label>
+            <button type="submit">Start Survey</button>
+            <input type="hidden" name="current_question" value="{{ question_id }}">
+        </form>
+    {% else %}
+        <h1>{{ question['text'] }}</h1>
+        <form id="surveyForm" action="/survey" method="POST">
+            <!-- Include input fields based on the current question type -->
+            {% if question_id == 'q1' %}
+                {% for field in question.fields %}
+                    <label>{{ field.capitalize() }}: <input type="text" name="{{ field }}"></label>
+                {% endfor %}
+            {% elif question.type == 'yes_no' %}
+                <label>Yes: <input type="radio" name="{{ question.field }}" value="yes"></label>
+                <label>No: <input type="radio" name="{{ question.field }}" value="no"></label>
+            {% elif question.type == 'choice' %}
+                {% for choice in question.choices %}
+                    <label>{{ choice }}: <input type="radio" name="{{ question.field }}" value="{{ choice }}"></label>
+                {% endfor %}
+            {% elif question.type == 'comment' %}
+                <label>Comment: <textarea name="{{ question.field }}"></textarea></label>
+            {% elif question.type == 'rating' %}
+                <label>Rating: <input type="number" name="{{ question.field }}" min="1" max="5"></label>
+            {% elif question.type == 'dynamic_choice' %}
+                {% for choice in question.choices %}
+                    <label>{{ choice }}: <input type="text" name="{{ choice }}"></label>
+                {% endfor %}
+            {% endif %}
+            {% if question_id == 'thank_you' %}
+                <button type="submit">Submit</button>
+            {% else %}
+                <button type="submit">Next</button>
+                <input type="hidden" name="current_question" value="{{ question_id }}">
+            {% endif %}
+        </form>
+    {% endif %}
+
+    <script>
+        // Add any JavaScript code here if needed
+    </script>
+</body>
+</html>
+
